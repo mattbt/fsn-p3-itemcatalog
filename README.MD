@@ -1,6 +1,6 @@
 Item Catalog Project
 ===
-##### Python web app for handling an Item Catalog
+##### Flask web app for handling an Item Catalog
 
 How to test Item Catalog App
 
