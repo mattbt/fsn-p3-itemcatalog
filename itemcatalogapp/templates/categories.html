@@ -1,0 +1,21 @@
+
+<h4>Categories</h4>
+<ul class="nav nav-pills nav-stacked">
+	{% for i in categories %}
+		{% if i.id == categorySelected.id %}
+			<li role="presentation" class='active'>
+		{% else %}
+			<li role="presentation">
+		{% endif %}
+			<a href="{{ url_for('itemcatalogbp.categoryItems', category_id = i.id) }}">{{ i.name }}</a>		
+		</li>
+	{% endfor %}
+	{% if 'username' in session %}
+		<hr/>
+		<li role="presentation">
+			<a href="{{url_for('itemcatalogbp.categoryNew')}}">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add category
+			</a>
+		</li>
+	{% endif %}
+</ul>

@@ -1,0 +1,14 @@
+<a href="{{url_for('itemcatalogbp.itemDetail', category_id = i.category_id, item_id = i.id)}}"><div class="col-lg-4 col-sm-6 col-md-4 col-xs-12">
+	<div class="thumbnail">
+	  <!--<img src="..." alt="...">-->
+	  <div class="caption">
+		<h4>{{ i.name }}</h4>
+		<!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec scelerisque dignissim elit ut posuere. Ut diam eros, semper id ante ut, lobortis euismod turpis. Fusce vulputate, ante vel sodales viverra, erat quam sodales felis, pellentesque consequat erat nibh a libero.</p>-->
+		<small><i>{{ i.category.name }}</i></small><br/><br/>
+		<div class='text-right entry-info'><small>
+			<i>{{i.usertable.name}} </i><span class="glyphicon glyphicon-user" aria-hidden="true"></span><br/>
+			<i>{{ i.insertDateTime.strftime('%d %b %Y %H:%M') }} </i><span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+		</small></div>
+	  </div>
+	</div>
+</div></a>

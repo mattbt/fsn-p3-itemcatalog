@@ -1,0 +1,36 @@
+{% extends "basetwocolumns.html" %}
+
+{% block pagination %}
+	<li><a href="{{url_for('itemcatalogbp.catalog')}}">Home</a></li>
+	<li><a href="{{ url_for('itemcatalogbp.categoryItems', category_id = itemSelected.category.id) }}">{{ itemSelected.category.name }}</a></li>
+	<li class="active"><a href="#">{{ itemSelected.name }}</a></li>
+{% endblock %}
+
+{% block categories %}
+	{% include 'categories.html' %}
+{% endblock %}
+
+{% block content %}
+		<div class="col-sm-12 col-md-12">
+			<div class="thumbnail">
+			  <!--<img src="..." alt="...">-->
+			  <div class="caption">
+				<h3>{{ itemSelected.name }}</h3>
+				<p>{{ itemSelected.description }}</p><br />
+				<p><small>Category: {{ itemSelected.category.name }}</small></p>
+				<p class='entry-info'>
+					<small>   
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><i> {{ itemSelected.usertable.name }}</i>
+						<br/>  
+						<span class="glyphicon glyphicon-time" aria-hidden="true"></span><i> {{ itemSelected.insertDateTime.strftime('%d %b %Y %H:%M')  }}</i>
+					</small>
+				</p>
+				<br />
+				{% if 'username' in session %}
+					<a href="{{url_for('itemcatalogbp.itemEdit', category_id = itemSelected.category_id, item_id = itemSelected.id)}}">Edit Item</a> | 
+					<a href="{{url_for('itemcatalogbp.itemDelete', category_id = itemSelected.category_id, item_id = itemSelected.id)}}">Delete Item</a>
+				{% endif %}
+			  </div>
+			</div>
+		</div>
+{% endblock %}

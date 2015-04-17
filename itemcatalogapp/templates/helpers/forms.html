@@ -1,0 +1,88 @@
+{% macro render(form) %}
+	<dl>
+	{{ form.hidden_tag() }}
+	{% for field in form if field.type not in ["HiddenField", "CSRFTokenField"] %}
+		<br />
+		<dd>
+			{{render_field(field, False)}}
+		</dd>
+	{% endfor %}
+	</dl>
+{% endmacro %}
+
+{% macro render_two_columns(form, readonly) %} 
+	<dl>
+	{{ form.hidden_tag() }}
+	{% for field in form if field.type not in ["HiddenField", "CSRFTokenField"] %}
+		
+		
+		<dd>
+			<label for="inputName" class="col-sm-2 control-label">{{field.description}}</label>
+			<div class="col-sm-10">
+				{{render_field(field, readonly)}}	
+			</div>
+		</dd>
+		<br /><br />
+	{% endfor %}
+	</dl>
+{% endmacro %}
+
+
+
+{% macro render_field(field, readonly) -%}
+	{% if field.type == "BooleanField" %}
+		{{render_checkbox_field(field)}}
+	{% elif field.type == "SelectField"%}
+		{{render_select_field(field, readonly=readonly)}}
+	{% elif field.type == "PasswordField"%}
+		{{render_icon_field(field, 'lock', none, readonly=readonly)}}
+	{% else %}
+		{% if field.label.text == "email" %}
+			{{render_icon_field(field, 'envelope', 'email', readonly=readonly)}}	
+		{% elif field.label.text == "name" %}
+			{{render_icon_field(field, 'user', none, readonly=readonly)}}
+		{% else %}
+			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, readonly=readonly)}}
+		{% endif %}
+	{% endif %}
+	{% if field.errors %}
+		<br/>
+		<div class='errors alert alert-danger alert-dismissible' role='alert'>		
+			{% for error in field.errors %}
+				<strong><span class='flashmessage'>{{ error }}</span></strong>
+			{% endfor %}
+		</div>
+		<hr />
+	{% endif %}
+{%- endmacro %}
+
+{% macro render_icon_field(field, icon_label, ftype, readonly) -%}
+    <div class="input-group">
+		<div class="input-group-addon">
+			<span class="glyphicon glyphicon-{{icon_label}}" aria-hidden="true"></span>
+		</div>
+		{% if ftype is none %}
+			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, readonly=readonly)}}
+		{% else %}
+			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, type=ftype, readonly=readonly)}}
+		{% endif %}
+	</div>
+{%- endmacro %}
+
+{% macro render_checkbox_field(field) -%}
+    <div class="checkbox">
+        <label>
+            {{ field(type='checkbox', required=field.flags.required) }} {{ field.label }}
+        </label>
+    </div>
+{%- endmacro %}
+
+{% macro render_select_field(field, readonly) -%}
+	<select name="{{ field.label.text }}" class="form-control" required={{field.flags.required}} {% if readonly %}readonly{% endif %}>
+		<option disabled value = "" {% if field.data is none %} selected {% endif %}> -- select an option -- </option>
+		{% for option in field %}		
+					{{option}}
+		{% endfor %}
+	</select>
+{%- endmacro %}
+

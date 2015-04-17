@@ -1,0 +1,47 @@
+{% extends "basetwocolumns.html" %}
+
+
+
+{% block pagination %}
+	<li><a href="#">Home</a></li>
+{% endblock %}
+
+{% block categories %}
+	{% include 'categories.html' %}
+{% endblock %}
+
+{% block content %}
+		
+	{% if 0 == categories|length %}
+		<div class='col-md-12 col-sm-12 col-xs-12'>
+			<div class="alert alert-info" role="alert">No categories found</div>
+		</div>
+	{% else %}
+		{% if 'username' in session %}
+			<div class='col-md-6 col-sm-6 col-xs-6'>
+				<h4>Last {{home_item_num}} inserted items</h4>
+			</div>
+			<div class='col-md-6 col-sm-6 col-xs-6'>
+				<h4 class='text-right'> 
+					<a href="{{url_for('itemcatalogbp.categoryNewItem', category_id = 0)}}">
+						 add item <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+					</a>
+				</h4>
+			</div>
+		{% else %}
+			<div class='col-md-12 col-sm-12 col-xs-12'>
+				<h4>Last {{home_item_num}} inserted items</h4>
+			</div>
+		{% endif %}
+			
+		{% if 0 == itemslist|length %}
+			<div class='col-md-12 col-sm-12 col-xs-12'>
+				<div class="alert alert-info" role="alert">no items found</div>
+			</div>
+		{% else %}	
+			{% for i in itemslist %}
+				{% include 'itemthumbtemplate.html' %}
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endblock %}

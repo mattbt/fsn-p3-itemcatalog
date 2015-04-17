@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+
+{% block main %}
+	<div class = 'col-md-2 col-sm-2 col-xs-4 category-side' >							
+		{% block categories %}{% endblock %}
+	</div>
+
+	<div class = 'col-md-10 col-sm-10 col-xs-8'>
+		<div class='row'>
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<div class='col-md-12 col-sm-12 col-xs-12'>
+								<div class='alert alert-success alert-dismissible' role='alert'>
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							{% for message in messages %}
+								<strong><span class='flashmessage'>{{ message }}</span></strong>
+							{% endfor %}
+								</div>
+							</div>
+						{% endif %}
+					{% endwith %}
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+<html>
+	<head>
+		<!--<link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">-->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel=stylesheet type=text/css href="{{url_for('static', filename='style.css')}}">
+
+		<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		{% block head %}{% endblock %}
+	</head>
+	<body>
+		<div class='container'>
+			
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="{{url_for('itemcatalogbp.catalog')}}">Item Catalog App</a>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav navbar-right">
+							{% if 'username' not in session %}
+							<li>
+								<form class="navbar-form" action="{{url_for('usersbp.showLogin')}}">
+									<button class="btn btn-default" type="Submit">
+										<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Sign In
+									</button>
+								</form>
+							</li>
+							<li >							
+								<form class="navbar-form" action="{{url_for('usersbp.showSignUp')}}">
+									<button class="btn btn-info" type="Submit">
+										<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Sign Up
+									</button>
+								</form>
+							</li>
+							{% else %}
+								<li class="btn-group navbar-btn">
+								 
+								  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									{{session['username']}}
+									{% if session['picture'] is none %}
+										<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+									{% else %}
+										<img src="{{session['picture']}}" style="width:24px; height:24px; border-radius:150px; -webkit-border-radius:150px; -moz-border-radius:150px;"></img>
+									{% endif %}
+									<span class="caret"></span>
+								  </button>
+								  
+								  <ul class="dropdown-menu" role="menu">
+									<li><a href="#">Profile</a></li>
+									<li class="divider"></li>
+									<li><a href="{{url_for('usersbp.disconnect')}}">Logout</a></li>
+								  </ul>
+								</li>
+								
+							{% endif %}
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</div><!-- /.container-fluid -->
+			</nav>
+		
+			<br/>			
+			<br/>
+			<br/>
+			<ol class="breadcrumb">
+				{% block pagination %}{% endblock %}
+			</ol>
+
+			<div class = 'row'>
+				{% block main %}{% endblock %}
+			</div>
+		</div>
+	</body>
+</html>

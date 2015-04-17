@@ -1,0 +1,188 @@
+{% extends "baseonecolumn.html" %}
+{% import "helpers/forms.html" as forms %}
+
+{% block head %}
+	<script src="https://apis.google.com/js/client:platform.js?onload=handleClientLoad" async defer>
+	</script>
+{% endblock %}
+
+
+
+{% block content %}		
+	
+	
+	<div class='col-md-12 col-sm-12 col-xs-12' id="auth_box">
+		<div class="row" id="myAuth_box">
+			<div class='col-md-4 col-sm-4 col-xs-4 col-sm-offset-4 col-xs-offset-4 col-md-offset-4' style="border: #ddd 1px solid; border-radius: 10px; text-align: center;">
+				<h3><small><b>SIGN IN</b></small></h3>
+				<form class="form-group" action="{{url_for('usersbp.myLogin')}}" method = "POST">
+					{{forms.render(login_form)}}
+					<p><input type="Submit" Value="Sign In" class="btn btn-success col-md-12 col-sm-12 col-xs-12"></input></p>
+					<br/>
+					<br/>
+				</form>
+			</div>
+		</div>
+		<br/>
+		<div class="row" id="oAuth_box">
+			
+		
+			<div class='col-md-2 col-sm-2 col-xs-2 col-sm-offset-4 col-xs-offset-4 col-md-offset-4' id="signinButton" >
+				<span  class="g-signin"
+					data-scope="openid email"
+					data-clientid="187730040588-scpl4e5uolp4knvrsik09a5s0h5p8hfv.apps.googleusercontent.com"
+					data-redirecturi="postmessage"
+					data-accesstype="offline"
+					data-cookiepolicy="single_host_origin"
+					data-callback="signInCallback"
+					data-approvalprompt="force">
+				</span>
+			</div>
+			<div class='col-md-2 col-sm-2 col-xs-2'  id="fbSigninButton">
+				<!--<fb:login-button scope="public_profile, email" onlogin="sendTokenToServer();">
+					<a href='javascript:sendTokenToServer()'>Facebook</a>
+				</fb:login-button>-->
+				
+					<button class="btn btn-info" type="Submit" onclick="sendTokenToServer();" style="width:100%;">
+						<img src="{{url_for('static', filename='fbicon.png')}}" alt="FB" style="width:30px; height:30px;"></img> Facebook
+					</button>
+				
+			</div>
+			
+		</div>
+		<div class="row" id="result_box" style="display:none;">
+			<div class='col-md-4 col-sm-4 col-xs-4 col-sm-offset-4 col-xs-offset-4 col-md-offset-4' style="border: #ddd 1px solid; border-radius: 10px; text-align: center;" id="result">
+			</div>
+		</div>
+		<div class="row" id="auth_loading_box" style="display:none;">
+			<div class='col-md-4 col-sm-4 col-xs-4 col-sm-offset-4 col-xs-offset-4 col-md-offset-4' style="border-radius: 10px; text-align: center;">
+				<img src="{{url_for('static', filename='load.gif')}}" alt="LOADING..."></img>
+			</div>
+		</div>	
+		
+	</div>
+	
+	
+	
+	<script>
+		function auth_loading(){
+			//$('#result_box').show();
+			$('#myAuth_box').hide();
+			$('#oAuth_box').hide();
+			$('#auth_loading_box').show();
+		}
+		function auth_fail(){
+			$('#result').html('Failed to make a server side call. Check your configuration and console');
+			$('#result_box').show();
+			$('#myAuth_box').show();
+			$('#oAuth_box').show();
+			$('#auth_loading_box').hide();
+		}
+		function auth_success(result){
+			//$('#result').html('<h3><b>' + result + '</b></h3><br/><small>Redirecting...</small>')
+			$('#myAuth_box').show();
+			$('#oAuth_box').show();
+			$('#result_box').hide();
+			$('#auth_loading_box').hide();
+		}
+		
+		/*gapi.signin.render("mySignIn", { 
+			'scope=':"https://www.googleapis.com/auth/plus.me",
+			'clientid':"187730040588-scpl4e5uolp4knvrsik09a5s0h5p8hfv.apps.googleusercontent.com",
+			'redirecturi':"postmessage",
+			'accesstype':"offline",
+			'cookiepolicy':"single_host_origin",
+			'callback':signInCallback,
+			'approvalprompt':"force",
+		});*/
+
+		function signInCallback(authResult){
+			if(authResult['code']){
+				// Hide the sign-in button now the user is authorized
+				auth_loading();
+				// Send the one-time-use code to the server, 
+				// if the server responds, write a 'login successful' message to the web page
+				// and then redirect back to the main page
+				$.ajax({
+					type: 'POST',
+					url: 'gconnect?state={{STATE}}',
+					processData: false,
+					contentType: 'application/octet-stream; charset=utf-8',
+					data: authResult['code'],
+					success: function(result){
+						if(result){
+
+							window.location.href = "/";
+							
+						} else if (authResult['error']) {
+							console.log('There was an error ' + authResult['error']);
+						} else {
+							auth_fail();
+						}
+					}
+				});
+			}
+		}
+	</script>
+	<script>
+		// Here we run a very simple test of the Graph API after login is
+		  // successful.  See statusChangeCallback() for when this call is made.
+		function sendTokenToServer() {
+			auth_loading();
+			
+			FB.login(function(response) {
+				if (response.authResponse) {
+			
+					var access_token = response.authResponse.accessToken; //FB.getAuthResponse()['accessToken'];
+					console.log(access_token)
+					console.log('Welcome!  Fetching your information.... ');
+					FB.api('/me', function(response) {
+						console.log('Successful login for: ' + response.name);
+						$.ajax({
+						  type: 'POST',
+						  url: '/fbconnect?state={{STATE}}',
+						  processData: false,
+						  data: access_token,
+						  contentType: 'application/octet-stream; charset=utf-8',
+						  success: function(result) {
+								// Handle or verify the server response if necessary.
+								if (result) {
+								window.location.href = "/";
+								 /*setTimeout(function() {
+								  window.location.href = "/";
+								 }, 4000);*/	  
+								} else {
+									auth_fail();
+								}
+							}
+			  
+						});
+					});
+				}
+			}, {
+				scope: 'public_profile, email'
+			});
+		}
+		
+		window.fbAsyncInit = function(){
+			FB.init({
+				appId	: '1627000280845684',
+				cookie	: true, // enable cookies to allow the server access the session
+				xfbml	: true, // parse social plugins on this page
+				version	: 'v2.3' // use version 2.2
+			});
+		};
+		
+		// Load the SDK asynchronously
+		(function(d, s, id){
+			 var js, fjs = d.getElementsByTagName(s)[0];
+			 if (d.getElementById(id)) {return;}
+			 js = d.createElement(s); js.id = id;
+			 js.src = "//connect.facebook.net/en_US/sdk.js";
+			 fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	   
+		
+
+	</script>
+{% endblock %}
