@@ -28,7 +28,10 @@ export DATABASE_URL="postgresql:///p3"`
  `python run.py`
 - open http://localhost:5000/catalog/ and try the app
 
-![Alt text](/../screenshots/screenshots/itemcatalog1.png?raw=true "Optional Title")
+![Alt text](/../screenshots/screenshots/itemcatalog1.png?raw=true)
+![Alt text](/../screenshots/screenshots/itemcatalog2.png?raw=true)
+![Alt text](/../screenshots/screenshots/itemcatalog3.png?raw=true)
+![Alt text](/../screenshots/screenshots/itemcatalog4.png?raw=true)
 ---
 >### ADDITIONAL NOTES
 - facebook secrets file (/itemcatalogapp/users/fb_client_secrets.json) do not contain real app values. To test those functionalities consider creating your app and filling that file with "app_id" and "app_secret"
