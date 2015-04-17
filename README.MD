@@ -5,7 +5,7 @@ Item Catalog Project
 How to test Item Catalog App
 
 Using Vagrant
-- download the project folder in a vagrant shared folder
+- download the project folder (master branch) in a vagrant shared folder
 - start and connect to vagrant VM
 - install Python 2.7
 - install postgresSQL
