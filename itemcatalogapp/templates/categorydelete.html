@@ -3,7 +3,7 @@
 
 {% block pagination %}
 	<li><a href="{{url_for('itemcatalogbp.catalog')}}">Home</a></li>
-	<li><a href="{{ url_for('itemcatalogbp.categoryItems', category_id = categorySelected.Category.id) }}">{{ categorySelected.Category.name }}</a></li>
+	<li><a href="{{ url_for('itemcatalogbp.categoryItems', category_id = categorySelected.id) }}">{{ categorySelected.name }}</a></li>
 	<li class="active"><a href="#">delete category</a></li>
 {% endblock %}
 
@@ -15,7 +15,7 @@
 <h3 class="col-sm-offset-2">Delete Category</h3>
 
 <br/>
-<form class="form-horizontal" action="{{ url_for('itemcatalogbp.categoryDelete', category_id = categorySelected.Category.id) }}" method="post">
+<form class="form-horizontal" action="{{ url_for('itemcatalogbp.categoryDelete', category_id = categorySelected.id) }}" method="post">
   <div class="form-group">
     {{forms.render_two_columns(category_form, true)}}
   </div>
@@ -25,7 +25,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 			  <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-			  <input type="text" class="form-control" id="userName" value="{{ categorySelected.User.name }}" readonly>
+			  <input type="text" class="form-control" id="userName" value="{{ categorySelected.usertable.name }}" readonly>
 			</div>
 		</div>
 	  </div>
@@ -34,7 +34,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 			  <div class="input-group-addon"><span class="glyphicon glyphicon-time" aria-hidden="true"></span></div>
-			  <input type="text" class="form-control" id="datetime" value="{{ categorySelected.Category.insertDateTime.strftime('%d %b %Y %H:%M')  }}" readonly>
+			  <input type="text" class="form-control" id="datetime" value="{{ categorySelected.insertDateTime.strftime('%d %b %Y %H:%M')  }}" readonly>
 			</div>
 		</div>
 	  </div>
@@ -51,7 +51,7 @@
 		<button type="submit" class="btn btn-danger">Delete</button>
 		<a class="btn btn-default" 
 		href="{% if action != 'new' %}
-			{{url_for('itemcatalogbp.categoryItems', category_id = categorySelected.Category.id)}}
+			{{url_for('itemcatalogbp.categoryItems', category_id = categorySelected.id)}}
 		{% else %}
 			{{url_for('itemcatalogbp.catalog')}}
 		{% endif %}"
