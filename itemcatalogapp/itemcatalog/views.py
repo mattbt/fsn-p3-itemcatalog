@@ -2,7 +2,6 @@ import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 from flask import flash, jsonify
 
-
 # Blueprint declaration
 itemcatalogbp = Blueprint("itemcatalogbp", __name__)
 
@@ -18,7 +17,11 @@ from ..decorators import login_required
 from .forms import CategoryForm, ItemForm
 
 
-#API endpoint
+
+##################
+# API endpoint ###
+##################
+
 @itemcatalogbp.route('/catalog.json')
 def catalogJSON():
     categories = dbhelper.getAllCategories()
@@ -26,8 +29,12 @@ def catalogJSON():
                                           .getItemsFromCategoryID(c.id))
                                for c in categories])
 
+				   
+							   
+##########
+# Home ###
+##########
 
-#routing
 @itemcatalogbp.route('/')
 @itemcatalogbp.route('/catalog/')
 def catalog():
@@ -169,7 +176,6 @@ def categoryNewItem(category_id):
 
         # get data from form
         name = item_form.name.data
-        print item_form.category_id.data
         category_id = item_form.category_id.data 
         description = item_form.description.data 
         insertDateTime = datetime.datetime.now()

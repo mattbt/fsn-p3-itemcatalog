@@ -1,11 +1,21 @@
 import os
 
+# available languages
+LANGUAGES = {
+	'en': 'English',
+	'it': 'Italian'
+}
+
 class Config(object):
 	DEBUG = False
 	TESTING = False
 	CSRF_EANBLED = True
 	SECRET_KEY = 'wefergasdtehgbsrtrge546'
 	SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+	BABEL_DEFAULT_LOCALE = 'en'
+	BABEL_DEFAULT_TIMEZONE = 'UTC'
+	LANGUAGE = 'it'
+
 	
 class ProductionConfig(Config):
 	DEBUG = False
