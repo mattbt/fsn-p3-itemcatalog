@@ -12,7 +12,7 @@ class Category(db.Model):
 	name = db.Column(db.String(80), nullable = False)
 	id = db.Column(db.Integer, primary_key = True)
 	user_id = db.Column(db.Integer, db.ForeignKey('usertable.id'))
-	usertable = db.relationship(User)
+	user = db.relationship(User)
 	insertDateTime = db.Column(db.DateTime, nullable = False)
 
 	def get_dict(self, items):
@@ -32,7 +32,7 @@ class Item(db.Model):
 	category = db.relationship(Category)
 	description = db.Column(db.String(250))
 	user_id = db.Column(db.Integer, db.ForeignKey('usertable.id'))
-	usertable = db.relationship(User)
+	user = db.relationship(User)
 	insertDateTime = db.Column(db.DateTime, default=time.time(), nullable = False)
 	
 	@property

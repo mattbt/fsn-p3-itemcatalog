@@ -30,7 +30,7 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav navbar-right">
-							{% if 'username' not in session %}
+							{% if not current_user.is_authenticated() %}
 							<li>
 								<form class="navbar-form" action="{{url_for('usersbp.showLogin')}}">
 									<button class="btn btn-default" type="Submit">
@@ -49,8 +49,8 @@
 								<li class="btn-group navbar-btn">
 								 
 								  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-									{{session['username']}}
-									{% if session['picture'] is none %}
+									{{current_user.name}}
+									{% if current_user.picture is none %}
 										<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 									{% else %}
 										<img src="{{session['picture']}}" style="width:24px; height:24px; border-radius:150px; -webkit-border-radius:150px; -moz-border-radius:150px;"></img>

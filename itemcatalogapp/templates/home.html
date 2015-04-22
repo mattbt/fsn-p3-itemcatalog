@@ -17,7 +17,7 @@
 			<div class="alert alert-info" role="alert">No categories found</div>
 		</div>
 	{% else %}
-		{% if 'username' in session %}
+		{% if current_user.is_authenticated() %}
 			<div class='col-md-6 col-sm-6 col-xs-6'>
 				<h4>Last {{home_item_num}} inserted items</h4>
 			</div>

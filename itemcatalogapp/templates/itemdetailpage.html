@@ -20,13 +20,13 @@
 				<p><small>Category: {{ itemSelected.category.name }}</small></p>
 				<p class='entry-info'>
 					<small>   
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><i> {{ itemSelected.usertable.name }}</i>
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><i> {{ itemSelected.user.name }}</i>
 						<br/>  
 						<span class="glyphicon glyphicon-time" aria-hidden="true"></span><i> {{ itemSelected.insertDateTime.strftime('%d %b %Y %H:%M')  }}</i>
 					</small>
 				</p>
 				<br />
-				{% if 'username' in session %}
+				{% if current_user.is_authenticated() %}
 					<a href="{{url_for('itemcatalogbp.itemEdit', category_id = itemSelected.category_id, item_id = itemSelected.id)}}">Edit Item</a> | 
 					<a href="{{url_for('itemcatalogbp.itemDelete', category_id = itemSelected.category_id, item_id = itemSelected.id)}}">Delete Item</a>
 				{% endif %}

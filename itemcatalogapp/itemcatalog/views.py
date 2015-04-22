@@ -9,9 +9,8 @@ itemcatalogbp = Blueprint("itemcatalogbp", __name__)
 from models import Category, Item
 from .. import dbhelper
 
-# Import session data
-from ..users.views import login_session
-from ..decorators import login_required
+#session data: Flask-Login
+from flask.ext.login import login_required, current_user 
 
 # Import Forms
 from .forms import CategoryForm, ItemForm
@@ -69,7 +68,7 @@ def categoryNew():
 
         # insert new Category
         newCategory = Category(name = name,
-                               user_id = login_session['user_id'],
+                               user_id = current_user.id,
                                insertDateTime = insertDateTime)
         dbhelper.add(newCategory)
         
@@ -184,7 +183,7 @@ def categoryNewItem(category_id):
         newItem = Item(name = name,
                        category_id = category_id,
                        description = description,
-                       user_id = login_session['user_id'],
+                       user_id = current_user.id,
                        insertDateTime = insertDateTime)
         dbhelper.add(newItem)
 

@@ -7,6 +7,8 @@ usersbp = Blueprint("usersbp", __name__)
 
 # Session
 from flask import session as login_session
+# Flask-Login
+from flask.ext.login import login_user, logout_user, current_user
 
 # myAuth
 from werkzeug import generate_password_hash
@@ -26,7 +28,6 @@ from models import User
 from .. import dbhelper
 
 # Import session data
-from ..users.views import login_session
 from .forms import RegisterForm, LoginForm
 
 
@@ -59,19 +60,20 @@ def myRegister():
             # if user email not already in db
             # create user and insert in DB
             user = User()
-            user.pwdhash = generate_password_hash(form.password.data)
+            user.password = generate_password_hash(form.pwd.data)
+            print user.password
             form.populate_obj(user)
     
-            dbhelper.add(user)
+            dbhelper.addUser(user)
             
             
             # populate session
-            login_session['provider'] = 'myauth'
+            '''login_session['provider'] = 'myauth'
             login_session['username'] = user.name
             login_session['email'] = user.email
             login_session['user_id'] = getUserID(login_session['email'])
-            login_session['picture'] = user.picture
-            #login_user(user)
+            login_session['picture'] = user.picture'''
+            login_user(user)
             return redirect(url_for('itemcatalogbp.catalog'))
     else:
         
@@ -90,6 +92,7 @@ def myRegister():
 # Store it in the session for later validation
 @usersbp.route('/login')
 def showLogin():
+    print('here')
     login_form = LoginForm()
     STATE = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = STATE
@@ -247,21 +250,21 @@ def myLogin():
             return redirect(url_for('usersbp.showLogin'))
         
         # if user email in db:
-        # if pwdhash is empty, user previously logged in with oAuth - alert user to log in again with oAuth
-        if user.pwdhash is None:
+        # if password is empty, user previously logged in with oAuth - alert user to log in again with oAuth
+        if user.password is None:
             flash('user already in db but previously logged with oAuth, please login with oAuth')
             return redirect(url_for('usersbp.showLogin'))
         
-        # else if pwdhash is not empty, check for match
+        # else if password is not empty, check for match
         if user.check_password(form.password.data): 
             
             # if password correct, set login_session
-            login_session['provider'] = 'myauth'
+            '''login_session['provider'] = 'myauth'
             login_session['username'] = user.name
             login_session['email'] = user.email
             login_session['user_id'] = getUserID(login_session['email'])
-            login_session['picture'] = user.picture
-            #login_user(user)
+            login_session['picture'] = user.picture'''
+            login_user(user)
             return redirect(url_for('itemcatalogbp.catalog'))
         else:
             
@@ -281,13 +284,13 @@ def myLogin():
 
 @usersbp.route('/disconnect')
 def disconnect():
+   
 
     # Only disconnect a connected user
-    if 'email' not in login_session:
-        response = make_response(json.dumps("Current User not connected"), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
+    if not current_user.is_authenticated():
+        flash("No user connected")
+        return redirect(url_for('itemcatalogbp.catalog'))
+       
     # disconnect from google / facebook oAuth
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
@@ -297,14 +300,10 @@ def disconnect():
         elif login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
-                        
-    #elif login_session['provider'] == 'myauth':
-    # delete login_session
-    del login_session['username']
-    del login_session['email']
-    del login_session['picture']
-    del login_session['user_id']
-    del login_session['provider']
+    
+    # Flask-login clean session
+    logout_user()
+	
     #flash("You have successfully been logged out")
     return redirect(url_for('itemcatalogbp.catalog'))
 
@@ -348,6 +347,7 @@ def gdisconnect():
 ###############
 # helper ######
 ###############
+
 
 def createUser(login_session):
     newUser = User(name = login_session['username'], email = login_session['email'], picture = login_session['picture'])

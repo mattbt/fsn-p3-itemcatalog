@@ -10,7 +10,7 @@
 			<a href="{{ url_for('itemcatalogbp.categoryItems', category_id = i.id) }}">{{ i.name }}</a>		
 		</li>
 	{% endfor %}
-	{% if 'username' in session %}
+	{% if current_user.is_authenticated() %}
 		<hr/>
 		<li role="presentation">
 			<a href="{{url_for('itemcatalogbp.categoryNew')}}">
