@@ -1,7 +1,13 @@
 {% macro render(form) %}
 	<dl>
 	{{ form.hidden_tag() }}
-	{% for field in form if field.type not in ["HiddenField", "CSRFTokenField"] %}
+	{% for field in form if field.type not in ["HiddenField", "CSRFTokenField", "SubmitField"] %}
+		<br />
+		<dd>
+			{{render_field(field, False)}}
+		</dd>
+	{% endfor %}
+	{% for field in form if field.type in ["SubmitField"] %}
 		<br />
 		<dd>
 			{{render_field(field, False)}}
@@ -36,10 +42,12 @@
 		{{render_select_field(field, readonly=readonly)}}
 	{% elif field.type == "PasswordField"%}
 		{{render_icon_field(field, 'lock', none, readonly=readonly)}}
+	{% elif field.type == "SubmitField"%}
+		{{field(class_='form-control btn btn-success', placeholder=field.description)}}
 	{% else %}
-		{% if field.label.text == "email" %}
+		{% if field.name == "email" %}
 			{{render_icon_field(field, 'envelope', 'email', readonly=readonly)}}	
-		{% elif field.label.text == "name" %}
+		{% elif field.label.text == "name" or field.name == "first_name" or field.name == "last_name"%}
 			{{render_icon_field(field, 'user', none, readonly=readonly)}}
 		{% else %}
 			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, readonly=readonly)}}
@@ -62,9 +70,9 @@
 			<span class="glyphicon glyphicon-{{icon_label}}" aria-hidden="true"></span>
 		</div>
 		{% if ftype is none %}
-			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, readonly=readonly)}}
+			{{field(class_='form-control', placeholder=field.label.text, required=field.flags.required, readonly=readonly)}}
 		{% else %}
-			{{field(class_='form-control', placeholder=field.description, required=field.flags.required, type=ftype, readonly=readonly)}}
+			{{field(class_='form-control', placeholder=field.label.text, required=field.flags.required, type=ftype, readonly=readonly)}}
 		{% endif %}
 	</div>
 {%- endmacro %}

@@ -15,6 +15,11 @@ class Config(object):
 	BABEL_DEFAULT_LOCALE = 'en'
 	BABEL_DEFAULT_TIMEZONE = 'UTC'
 	LANGUAGE = 'it'
+	
+	SECURITY_REGISTERABLE = True
+	SECURITY_CONFIRMABLE = False
+	SECURITY_CHANGEABLE = True
+	SECURITY_SEND_REGISTER_EMAIL = False
 
 	
 class ProductionConfig(Config):

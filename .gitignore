@@ -61,5 +61,13 @@ target/
 
 # my files
 itemcatalogapp/users/2client_secrets.json
+itemcatalogapp/users/client_secrets.json
 itemcatalogapp/users/2fb_client_secrets.json
-values.sql
+itemcatalogapp/users/fb_client_secrets.json
+itemcatalogapp/users/_views.py
+itemcatalogapp/templates/_login.html
+itemcatalogapp/templates/_register.html
+itemcatalogapp/static/_fbicon.png
+itemcatalogapp/static/_gpicon.png
+itemcatalogapp/static/_load.gif
+itemcatalogapp/_decorators.py

@@ -20,7 +20,7 @@
 				<p><small>Category: {{ itemSelected.category.name }}</small></p>
 				<p class='entry-info'>
 					<small>   
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><i> {{ itemSelected.user.name }}</i>
+						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><i> {{itemSelected.user.first_name}} {{itemSelected.user.last_name}}</i>
 						<br/>  
 						<span class="glyphicon glyphicon-time" aria-hidden="true"></span><i> {{ itemSelected.insertDateTime.strftime('%d %b %Y %H:%M')  }}</i>
 					</small>

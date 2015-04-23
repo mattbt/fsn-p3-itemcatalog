@@ -10,7 +10,8 @@ from models import Category, Item
 from .. import dbhelper
 
 #session data: Flask-Login
-from flask.ext.login import login_required, current_user 
+#from flask.ext.login import current_user
+from ..data import login_required, current_user
 
 # Import Forms
 from .forms import CategoryForm, ItemForm
@@ -55,7 +56,7 @@ def catalog():
 
 @itemcatalogbp.route('/catalog/new/', methods=['GET', 'POST'])
 @login_required # no access if user not logged
-@requires_roles('ad')
+#@requires_roles('ad')
 def categoryNew():
 
     # create form object

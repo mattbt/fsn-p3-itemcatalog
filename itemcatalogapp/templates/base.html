@@ -32,14 +32,14 @@
 						<ul class="nav navbar-nav navbar-right">
 							{% if not current_user.is_authenticated() %}
 							<li>
-								<form class="navbar-form" action="{{url_for('usersbp.showLogin')}}">
+								<form class="navbar-form" action="/login">
 									<button class="btn btn-default" type="Submit">
 										<span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{_('Sign In')}}
 									</button>
 								</form>
 							</li>
 							<li >							
-								<form class="navbar-form" action="{{url_for('usersbp.showSignUp')}}">
+								<form class="navbar-form" action="/register">
 									<button class="btn btn-info" type="Submit">
 										<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Sign Up
 									</button>
@@ -49,7 +49,7 @@
 								<li class="btn-group navbar-btn">
 								 
 								  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-									{{current_user.name}}
+									{{current_user.first_name}}{{current_user.last_name}}
 									{% if current_user.picture is none %}
 										<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 									{% else %}

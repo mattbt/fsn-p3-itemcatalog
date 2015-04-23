@@ -1,15 +1,9 @@
-from flask.ext.wtf import Form
-from wtforms import TextField, PasswordField, BooleanField, validators
 
-# Register Form
-class RegisterForm(Form):
-	name = TextField('name', [validators.Required()], description = "Name")
-	pwd = PasswordField('pwd', [validators.Required(), validators.EqualTo('confirm', message='Passwords must match')], description = "Password")
-	confirm = PasswordField('pwd', [validators.Required()], description = "Confirm Password")
-	email = TextField('email', [validators.Required(), validators.Email()], description = "Email")
-	accept_tos = BooleanField('I accept the TOS', [validators.Required()], description = "I accept the TOS")
+from wtforms import TextField, validators
 
-# Login Form
-class LoginForm(Form):
-	email = TextField('email', [validators.Required()], description = "Email")
-	password = PasswordField('pwd', [validators.Required()], description = "Password")
+from flask_security.forms import RegisterForm
+
+class ExtendedRegisterForm(RegisterForm):
+    first_name = TextField('First Name', [validators.Required()])
+    last_name = TextField('Last Name', [validators.Required()])
+

@@ -4,7 +4,7 @@
 # Import classes and dbsession
 from itemcatalog.models import Category, Item
 from users.models import User, Role
-from data import dbsession#, user_datastore
+from data import dbsession, user_datastore
 
 from sqlalchemy import desc
 
@@ -74,16 +74,7 @@ def add(obj):
 	dbsession.add(obj)
 	dbsession.commit()
 	
-def addUser(user):
-        '''user_datastore.create_user(password=user.password,
-                                   email=user.email,
-                                   picture=user.picture,
-                                   name=user.name
-                                   )'''
-        role = getRoleFromKeyword('admin')
-	user.roles.append(role)
-        dbsession.add(user)
-        dbsession.commit()
+
 
 ###################
 # Delete ##########

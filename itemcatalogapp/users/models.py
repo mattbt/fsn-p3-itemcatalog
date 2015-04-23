@@ -1,6 +1,7 @@
 #from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, ColumnDefault, Boolean
 from werkzeug import check_password_hash
-from flask.ext.login import UserMixin
+#from flask.ext.login import UserMixin
+
 
 from ..data import db #Base
 
@@ -22,7 +23,7 @@ from ..data import db #Base
 '''
 
 
-### Test Flask-User
+'''### Test Flask-User
 	# Define User model. Make sure to add flask.ext.user UserMixin !!!
 class User(db.Model, UserMixin):
         __tablename__ = 'usertable'
@@ -62,9 +63,9 @@ class Role(db.Model):
 class UserRoles(db.Model):
         id = db.Column(db.Integer(), primary_key=True)
         user_id = db.Column(db.Integer(), db.ForeignKey('usertable.id', ondelete='CASCADE'))
-        role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+        role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))'''
 
-'''### test Flask-Security
+### test Flask-Security
 from flask.ext.security import UserMixin, RoleMixin
 		
 roles_users = db.Table('roles_users',
@@ -80,7 +81,8 @@ class User(db.Model, UserMixin):
         __tablename__ = 'usertable'
         id = db.Column(db.Integer, primary_key=True)
         email = db.Column(db.String(255), unique=True)
-        name = db.Column(db.String(80), nullable = False)
+        first_name = db.Column(db.String(80), nullable = False, default='')
+	last_name = db.Column(db.String(80), nullable = False, default='')
         password = db.Column(db.String(255))
         picture = db.Column(db.String(250))
         active = db.Column(db.Boolean())
@@ -88,5 +90,3 @@ class User(db.Model, UserMixin):
         roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
 
-        def check_password(self, password):
-		return check_password_hash(self.password, password)'''
