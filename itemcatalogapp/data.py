@@ -4,15 +4,15 @@ from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 dbsession = db.session
 
-'''# Setup Flask-Security
-from .users.models import User, Role
-from flask.ext.security import Security, SQLAlchemyUserDatastore
+# Setup Flask-Security
+'''from .users.models import User, Role
+from flask.ext.security import Security, SQLAlchemyUserDatastore, current_app
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)'''
 
 # Setup Flask-login
 from flask.ext.login import LoginManager
-from .users.models import User
+from .users.models import User, Role
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -22,4 +22,7 @@ def load_user(id):
 
     :param unicode user_id: user_id (email) user to retrieve
     '''
+
     return User.query.get(id)
+
+

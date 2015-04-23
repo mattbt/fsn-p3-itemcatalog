@@ -67,7 +67,7 @@ def myRegister():
             dbhelper.addUser(user)
             
             
-            # populate session
+            # Flask-Login populate session
             '''login_session['provider'] = 'myauth'
             login_session['username'] = user.name
             login_session['email'] = user.email
@@ -257,7 +257,7 @@ def myLogin():
         
         # else if password is not empty, check for match
         if user.check_password(form.password.data): 
-            
+            print user.name
             # if password correct, set login_session
             '''login_session['provider'] = 'myauth'
             login_session['username'] = user.name
@@ -265,6 +265,7 @@ def myLogin():
             login_session['user_id'] = getUserID(login_session['email'])
             login_session['picture'] = user.picture'''
             login_user(user)
+            print current_user
             return redirect(url_for('itemcatalogbp.catalog'))
         else:
             

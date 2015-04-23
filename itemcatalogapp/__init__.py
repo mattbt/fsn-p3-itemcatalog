@@ -20,3 +20,15 @@ app.register_blueprint(usersbp)
 ### import db object and create tables if they don't exist
 from .data import db
 db.create_all()
+
+## import role value if not present
+from users.models import User, Role
+import dbhelper
+
+## initialize role table if empty
+if not dbhelper.getAllRoles():
+	dbhelper.addCustomRoles()
+	print 'added roles: %s' % [r.name for r in dbhelper.getAllRoles()]
+else:
+	print 'found roles: %s' % [r.name for r in dbhelper.getAllRoles()]
+	

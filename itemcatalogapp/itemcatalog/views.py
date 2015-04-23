@@ -15,7 +15,8 @@ from flask.ext.login import login_required, current_user
 # Import Forms
 from .forms import CategoryForm, ItemForm
 
-
+# decorators
+from ..decorators import requires_roles
 
 ##################
 # API endpoint ###
@@ -39,7 +40,7 @@ def catalogJSON():
 def catalog():
     # number of last items to be displayed in homepage
     home_item_num = 9
-
+    #print dbhelper.getRolesFromUserID(1)
     # render home page
     categories = dbhelper.getAllCategories()
     itemslist = dbhelper.getItemsForHomePage(home_item_num)
@@ -54,6 +55,7 @@ def catalog():
 
 @itemcatalogbp.route('/catalog/new/', methods=['GET', 'POST'])
 @login_required # no access if user not logged
+@requires_roles('ad')
 def categoryNew():
 
     # create form object

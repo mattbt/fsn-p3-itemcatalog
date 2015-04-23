@@ -4,7 +4,7 @@ from flask.ext.login import UserMixin
 
 from ..data import db #Base
 
-class User(db.Model, UserMixin): #Base):
+'''class User(db.Model, UserMixin): #Base):
 	__tablename__ = 'usertable'
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String(80), nullable = False)
@@ -19,16 +19,17 @@ class User(db.Model, UserMixin): #Base):
 	def check_password(self, password):
 		return check_password_hash(self.password, password)
                 #return (self.password == password)
-
-
 '''
+
+
 ### Test Flask-User
 	# Define User model. Make sure to add flask.ext.user UserMixin !!!
 class User(db.Model, UserMixin):
+        __tablename__ = 'usertable'
         id = db.Column(db.Integer, primary_key=True)
 
         # User Authentication information
-        username = db.Column(db.String(50), nullable=False, unique=True)
+        name = db.Column(db.String(50), nullable=False, unique=True)
         password = db.Column(db.String(255), nullable=False, default='')
         reset_password_token = db.Column(db.String(100), nullable=False, default='')
 
@@ -37,7 +38,7 @@ class User(db.Model, UserMixin):
         confirmed_at = db.Column(db.DateTime())
 
         # User information
-        is_enabled = db.Column(db.Boolean(), nullable=False, default=False)
+        is_enabled = db.Column(db.Boolean(), nullable=False, default=True)
         first_name = db.Column(db.String(50), nullable=False, default='')
         last_name = db.Column(db.String(50), nullable=False, default='')
         picture = db.Column(db.String(250))
@@ -47,27 +48,45 @@ class User(db.Model, UserMixin):
 
         def check_password(self, password):
                 return check_password_hash(self.password, password)
-        #return (self.password == password)
-'''
+        # Relationships
+        roles = db.relationship('Role', secondary='user_roles',
+                                backref=db.backref('users', lazy='dynamic'))
+
+# Define the Role DataModel
+class Role(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    #description = db.Column(db.String(100), unique=True)
+    
+# Define the UserRoles DataModel
+class UserRoles(db.Model):
+        id = db.Column(db.Integer(), primary_key=True)
+        user_id = db.Column(db.Integer(), db.ForeignKey('usertable.id', ondelete='CASCADE'))
+        role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+
 '''### test Flask-Security
 from flask.ext.security import UserMixin, RoleMixin
-
+		
 roles_users = db.Table('roles_users',
-    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+        db.Column('user_id', db.Integer(), db.ForeignKey('usertable.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
 class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
+        id = db.Column(db.Integer(), primary_key=True)
+        name = db.Column(db.String(80), unique=True)
+        description = db.Column(db.String(255))
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    name = db.Column(db.String(80), nullable = False)
-    password = db.Column(db.String(255))
-    picture = db.Column(db.String(250))
-    active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))'''
+        __tablename__ = 'usertable'
+        id = db.Column(db.Integer, primary_key=True)
+        email = db.Column(db.String(255), unique=True)
+        name = db.Column(db.String(80), nullable = False)
+        password = db.Column(db.String(255))
+        picture = db.Column(db.String(250))
+        active = db.Column(db.Boolean())
+        confirmed_at = db.Column(db.DateTime())
+        roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+
+        def check_password(self, password):
+		return check_password_hash(self.password, password)'''

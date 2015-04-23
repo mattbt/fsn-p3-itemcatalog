@@ -3,8 +3,8 @@
 
 # Import classes and dbsession
 from itemcatalog.models import Category, Item
-from users.models import User
-from data import dbsession #, user_datastore
+from users.models import User, Role
+from data import dbsession#, user_datastore
 
 from sqlalchemy import desc
 
@@ -50,13 +50,28 @@ def getUserFromEmail(user_email):
 def getUserFromID(user_id):
 	return dbsession.query(User).filter_by(id = user_id).one()
 
+
+# Roles ###########
+def getAllRoles():
+	return dbsession.query(Role).all()
+
+def getRoleFromKeyword(keyword):
+	return dbsession.query(Role).filter_by(name=keyword).one()
 	
+def getRolesFromUserID(user_id):
+        #return dbsession.query(Role).join(UserRoles.role_id).all()
+        return dbsession.query(User).filter_by(id=user_id).first().roles
+
+def addCustomRoles():
+	add(Role(name='admin'))
+	add(Role(name='company_admin'))
+	add(Role(name='risk_owner'))
 ###################
 # Add #############
 ###################
 
-def add(object):
-	dbsession.add(object)
+def add(obj):
+	dbsession.add(obj)
 	dbsession.commit()
 	
 def addUser(user):
@@ -65,6 +80,8 @@ def addUser(user):
                                    picture=user.picture,
                                    name=user.name
                                    )'''
+        role = getRoleFromKeyword('admin')
+	user.roles.append(role)
         dbsession.add(user)
         dbsession.commit()
 
